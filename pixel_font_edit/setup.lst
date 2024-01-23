@@ -1,0 +1,189 @@
+[Bootstrap]
+SetupTitle=Install
+SetupText=Copying Files, please stand by.
+CabFile=PixelFontEdit.CAB
+Spawn=Setup1.exe
+Uninstal=st6unst.exe
+TmpDir=msftqws.pdw
+Cabs=1
+
+[Bootstrap Files]
+File1=@VB6STKIT.DLL,$(WinSysPathSysFile),,,7/15/00 12:00:00 AM,101888,6.0.84.50
+File2=@COMCAT.DLL,$(WinSysPathSysFile),$(DLLSelfRegister),,5/31/98 12:00:00 AM,22288,4.71.1460.1
+File3=@STDOLE2.TLB,$(WinSysPathSysFile),$(TLBRegister),,6/3/99 12:00:00 AM,17920,2.40.4275.1
+File4=@ASYCFILT.DLL,$(WinSysPathSysFile),,,3/8/99 12:00:00 AM,147728,2.40.4275.1
+File5=@OLEPRO32.DLL,$(WinSysPathSysFile),$(DLLSelfRegister),,3/8/99 12:00:00 AM,164112,5.0.4275.1
+File6=@OLEAUT32.DLL,$(WinSysPathSysFile),$(DLLSelfRegister),,4/12/00 12:00:00 AM,598288,2.40.4275.1
+File7=@msvbvm60.dll,$(WinSysPathSysFile),$(DLLSelfRegister),,4/14/08 5:42:02 AM,1384479,6.0.98.2
+
+[IconGroups]
+Group0=8x8 Pixel ROM Font Editor
+PrivateGroup0=-1
+Parent0=$(Programs)
+
+[8x8 Pixel ROM Font Editor]
+Icon1="PixelFontEdit.exe"
+Title1=FontEditor
+StartIn1=$(AppPath)
+
+[Setup]
+Title=8x8 Pixel ROM Font Editor
+DefaultDir=$(ProgramFiles)\PixelFontEdit
+AppExe=PixelFontEdit.exe
+AppToUninstall=PixelFontEdit.exe
+
+[Setup1 Files]
+File1=@unicodedata.pyd,$(AppPath),,,10/2/09 8:42:24 PM,585728,0.0.0.0
+File2=@select.pyd,$(AppPath),,,10/2/09 8:43:26 PM,11776,0.0.0.0
+File3=@bz2.pyd,$(AppPath),,,10/2/09 8:42:12 PM,71168,0.0.0.0
+File4=@library.zip,$(AppPath),,,10/12/09 8:32:54 PM,1389360,0.0.0.0
+File5=@python26.dll,$(AppPath),,,10/2/09 8:41:38 PM,2140160,2.6.3150.1013
+File6=@w9xpopen.exe,$(AppPath),,,10/2/09 8:40:24 PM,49664,0.0.0.0
+File7=@mkwinfont.exe,$(AppPath),,,10/12/09 8:32:54 PM,30208,0.0.0.0
+File8=@cavelon.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File9=@cav_of_sillahc.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File10=@cav_of_eriban.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1282,0.0.0.0
+File11=@cauldron.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File12=@camel_trophy.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File13=@c64_upper.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File14=@c64_lower.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File15=@bx_4.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File16=@bx_2.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,472,0.0.0.0
+File17=@bx_1.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File18=@burnin_rubber.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File19=@broderbund_software.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1026,0.0.0.0
+File20=@broadway_xy.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File21=@broadout_xy.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File22=@bounces_numbers_xy.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File23=@bounces.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File24=@borderset_xy.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File25=@bomb_jack_2.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,722,0.0.0.0
+File26=@bold_xy.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File27=@blue_max.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File28=@blagger_junior.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File29=@blade_runner.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File30=@blackwyche.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1026,0.0.0.0
+File31=@black_lamp.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1490,0.0.0.0
+File32=@beyond_the_ice_palace.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,834,0.0.0.0
+File33=@bb-indoor.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,858,0.0.0.0
+File34=@batman.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,505,0.0.0.0
+File35=@batalyx.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File36=@barbarian_2.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File37=@attack_mutant_camels.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File38=@astro_pilot.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File39=@astra_xy_multi.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File40=@asterix.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File41=@army_moves.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File42=@arena_b.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,466,0.0.0.0
+File43=@arena_a.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File44=@arcadia.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1538,0.0.0.0
+File45=@arabian_nights.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File46=@aqua_racer.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1027,0.0.0.0
+File47=@apshai-toa_trilogy.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File48=@antik_3.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File49=@antik_2.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File50=@antik_1.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File51=@ancipital.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,465,0.0.0.0
+File52=@amigo_s.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,2050,0.0.0.0
+File53=@alternate_reality_x.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1906,0.0.0.0
+File54=@alternate_reality.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1002,0.0.0.0
+File55=@aliens.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,465,0.0.0.0
+File56=@action_wave.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,514,0.0.0.0
+File57=@7up.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,505,0.0.0.0
+File58=@1-writer.64c,$(AppPath)\Fonts\64,,,6/16/95 3:00:00 PM,1994,0.0.0.0
+File59=@TINYTYPE.pf,$(AppPath)\Fonts\pf,,,2/2/94 3:01:12 PM,2048,0.0.0.0
+File60=@THIN_SS.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File61=@THIN8X8.pf,$(AppPath)\Fonts\pf,,,2/2/94 3:01:12 PM,2048,0.0.0.0
+File62=@Standard.pf,$(AppPath)\Fonts\pf,,,2/3/06 5:38:22 PM,2049,0.0.0.0
+File63=@SPACE8.pf,$(AppPath)\Fonts\pf,,,2/4/06 4:51:40 PM,2049,0.0.0.0
+File64=@SMVGA88.pf,$(AppPath)\Fonts\pf,,,2/2/94 3:01:12 PM,2048,0.0.0.0
+File65=@SMEGA88.pf,$(AppPath)\Fonts\pf,,,2/2/94 3:01:12 PM,2048,0.0.0.0
+File66=@RUSSIAN.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File67=@ROM8PIX.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File68=@READABLE.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File69=@MARCIO08.pf,$(AppPath)\Fonts\pf,,,1/19/00 9:16:02 PM,2048,0.0.0.0
+File70=@MAC.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File71=@HERCULES.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File72=@HERCITAL.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File73=@GREEK.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File74=@GRCKSSRF.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File75=@FE_8X8.pf,$(AppPath)\Fonts\pf,,,9/5/05 10:07:14 PM,2048,0.0.0.0
+File76=@FANTASY.pf,$(AppPath)\Fonts\pf,,,2/2/94 3:01:12 PM,2048,0.0.0.0
+File77=@EVGA-ALT.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File78=@DEF_8X8.pf,$(AppPath)\Fonts\pf,,,2/2/94 3:01:12 PM,2048,0.0.0.0
+File79=@CYRILL3.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File80=@CYRILL2.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File81=@CYRILL1.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File82=@CYRIL_B.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File83=@CRAZY8.pf,$(AppPath)\Fonts\pf,,,1/20/00 2:46:14 AM,2048,0.0.0.0
+File84=@CP885.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File85=@CP884.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File86=@CP883.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File87=@CP882.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File88=@CP881.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File89=@CP880.pf,$(AppPath)\Fonts\pf,,,2/4/06 4:39:02 PM,2049,0.0.0.0
+File90=@CP866.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File91=@CP865.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File92=@CP864.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File93=@CP863.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File94=@CP862.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File95=@CP861.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File96=@CP860.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File97=@CP853.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File98=@CP852.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File99=@CP851.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File100=@CP850.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File101=@CP437old.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File102=@CP437.pf,$(AppPath)\Fonts\pf,,,2/4/06 4:05:42 PM,2049,0.0.0.0
+File103=@CP113.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File104=@CP112.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File105=@CP111.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File106=@ARMENIAN.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File107=@APEAUS.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File108=@8X8ITAL.pf,$(AppPath)\Fonts\pf,,,2/2/94 3:01:12 PM,2048,0.0.0.0
+File109=@8X8@FONT.pf,$(AppPath)\Fonts\pf,,,11/23/89 3:23:16 PM,2048,0.0.0.0
+File110=@8X8#FONT.pf,$(AppPath)\Fonts\pf,,,11/23/89 3:23:16 PM,2048,0.0.0.0
+File111=@8X8!FONT.pf,$(AppPath)\Fonts\pf,,,5/25/90 10:14:02 PM,2048,0.0.0.0
+File112=@VGA-ROM.pf,$(AppPath)\Fonts\pf,,,8/28/93 4:40:04 PM,2048,0.0.0.0
+File113=@APLS.pf,$(AppPath)\Fonts\pf,,,2/4/06 4:19:18 PM,2049,0.0.0.0
+File114=@comdlg32.ocx,$(WinSysPath),$(DLLSelfRegister),$(Shared),3/9/04 12:00:00 AM,152848,6.1.97.82
+File115=@PixelFontEdit.exe,$(AppPath),,,10/12/09 10:12:55 PM,131072,2.5.0.5
+
+; The following lines may be deleted in order to obtain extra 
+; space for customizing this file on a full installation diskette.
+; 
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+; XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -1,0 +1,1171 @@
+
+AVRASM ver. 1.30  MATRIX.ASM Mon Oct 25 23:17:40 2010
+
+
+         ; *********************************************************************************************************************************
+         ; programming	: pvar a.k.a. sp1r@l ev0lut10n
+         ; started		: 26 - 01 - 2010
+         ; completed		: 14 - 02 - 2010
+         ;
+         ; A minimal (and cool ;-) approach to LED-matrix driving!
+         ; *********************************************************************************************************************************
+         
+         ; **************************************************
+         ; * fundamental assembler directives
+         ; **************************************************
+         
+         ; constants -----------------------------------------------------------------------------------------------------------------------
+         
+          .include "tn2313.inc"
+         ;***************************************************************************
+         ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+         ;* 
+         ;* Number           :AVR000
+         ;* File Name        :"tn2313def.inc"
+         ;* Title            :Register/Bit Definitions for the ATtiny2313
+         ;* Date             :03.06.17
+         ;* Version          :1.00
+         ;* Support E-mail   :avr@atmel.com
+         ;* Target MCU       :ATtiny2313
+         ;*
+         ;* DESCRIPTION
+         ;* When including this file in the assembly program file, all I/O register  
+         ;* names and I/O register bit names appearing in the data book can be used.
+         ;* In addition, the two registers forming the data pointer Z have been 
+         ;* assigned names ZL - ZH. 
+         ;*
+         ;* The Register names are represented by their hexadecimal address.
+         ;* 
+         ;* The Register Bit names are represented by their bit number (0-7).
+         ;* 
+         ;* Please observe the difference in using the bit names with instructions
+         ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc" 
+         ;* (skip if bit in register set/cleared). The following example illustrates
+         ;* this:
+         ;* 
+         ;* in   r16,PORTB       ;read PORTB latch
+         ;* sbr  r16,(1<<PB6)+(1<<PB5)   ;set PB6 and PB5 (use masks, not bit#)
+         ;* out  PORTB,r16       ;output to PORTB
+         ;*
+         ;* in   r16,TIFR        ;read the Timer Interrupt Flag Register
+         ;* sbrc r16,TOV0        ;test the overflow flag (use bit#)
+         ;* rjmp TOV0_is_set     ;jump if set
+         ;* ...                  ;otherwise do something else
+         ;*  
+         ;***************************************************************************
+         
+         ;***** Specify Device
+         ;.device ATtiny2313
+         
+             
+         ;*****************************************************************************
+         ; I/O Register Definitions
+         ;*****************************************************************************
+         
+          .equ    SREG    = 0x3F
+          .equ    SPL     = 0x3D
+          .equ    OCR0B   = 0x3C
+          .equ    GIMSK   = 0x3B
+          .equ    EIFR    = 0x3A
+          .equ    GIFR    = 0x3A      ; for compatibility purpose
+          .equ    TIMSK   = 0x39       
+          .equ    TIFR    = 0x38
+          .equ    SPMCSR  = 0x37
+          .equ    OCR0A   = 0x36
+          .equ    MCUCR   = 0x35
+          .equ    MCUSR   = 0x34
+          .equ    TCCR0B  = 0x33
+          .equ    TCCR0   = 0x33      ; for compatibility purpose
+          .equ    TCNT0   = 0x32
+          .equ    OSCCAL  = 0x31
+          .equ    TCCR0A  = 0x30
+          .equ    TCCR1A  = 0x2F
+          .equ    TCCR1B  = 0x2E
+          .equ    TCNT1H  = 0x2D
+          .equ    TCNT1L  = 0x2C
+          .equ    OCR1AH  = 0x2B
+          .equ    OCR1AL  = 0x2A
+          .equ    OCR1BH  = 0x29
+          .equ    OCR1BL  = 0x28
+          .equ    CLKPR   = 0x26
+          .equ    ICR1H   = 0x25
+          .equ    ICR1L   = 0x24
+          .equ    GTCCR   = 0x23     
+          .equ    SFIOR   = 0x23      ; for compatibility purpose
+          .equ    TCCR1C  = 0x22
+          .equ    WDTCR   = 0x21
+          .equ    PCMSK   = 0x20
+          .equ    EEAR    = 0x1E      ; for compatibility purpose
+          .equ    EEARL   = 0x1E  
+          .equ    EEDR    = 0x1D
+          .equ    EECR    = 0x1C
+          .equ    PORTA   = 0x1B
+          .equ    DDRA    = 0x1A
+          .equ    PINA    = 0x19
+          .equ    PORTB   = 0x18
+          .equ    DDRB    = 0x17
+          .equ    PINB    = 0x16
+          .equ    GPIOR2  = 0x15
+          .equ    GPIOR1  = 0x14
+          .equ    GPIOR0  = 0x13
+          .equ    PORTD   = 0x12
+          .equ    DDRD    = 0x11
+          .equ    PIND    = 0x10  
+          .equ    USIDR   = 0x0F
+          .equ    USISR   = 0x0E
+          .equ    USICR   = 0x0D
+          .equ    UDR     = 0x0C
+          .equ    UCSRA   = 0x0B
+          .equ    USR     = 0x0B      ; for compatibility purpose
+          .equ    UCSRB   = 0x0A
+          .equ    UCR     = 0x0A      ; for compatibility purpose
+          .equ    UBRRL   = 0x09
+          .equ    UBRR    = 0x09      ; for compatibility purpose
+          .equ    ACSR    = 0x08
+          .equ    UCSRC   = 0x03
+          .equ    UBRRH   = 0x02
+          .equ    DIDR    = 0x01
+         
+             
+         ;*****************************************************************************
+         ; Bit Definitions
+         ;*****************************************************************************
+         
+         ;***** SREG *******
+          .equ I          = 7 
+          .equ T          = 6
+          .equ H          = 5
+          .equ S          = 4
+          .equ V          = 3
+          .equ N          = 2
+          .equ Z          = 1
+          .equ C          = 0
+         
+         ;***** SPL ********
+          .equ SP7        = 7 
+          .equ SP6        = 6
+          .equ SP5        = 5
+          .equ SP4        = 4
+          .equ SP3        = 3
+          .equ SP2        = 2
+          .equ SP1        = 1
+          .equ SP0        = 0
+         
+         ;***** GIMSK ******
+          .equ INT1       = 7 
+          .equ INT0       = 6  
+          .equ PCIE       = 5
+         
+         ;***** EIFR *******
+          .equ INTF1      = 7
+          .equ INTF0      = 6  
+          .equ PCIF       = 5
+         
+         ;***** TIMSK ******
+          .equ TOIE1      = 7
+          .equ OCIE1A     = 6
+          .equ OCIE1B     = 5
+          .equ ICIE1      = 3  
+          .equ OCIE0B     = 2  
+          .equ TOIE0      = 1
+          .equ OCIE0A     = 0
+          .equ TICIE      = 3     ; for compatibility purpose
+         
+         ;***** TIFR *******
+          .equ TOV1       = 7
+          .equ OCF1A      = 6
+          .equ OCF1B      = 5
+          .equ ICF1       = 3  
+          .equ OCF0B      = 2  
+          .equ TOV0       = 1
+          .equ OCF0A      = 0
+         
+         ;***** SPMCSR *****
+          .equ CTPB       = 4
+          .equ RFLB       = 3
+          .equ PGWRT      = 2
+          .equ PGERS      = 1
+          .equ SPMEN      = 0
+         
+         ;***** MCUCR ******
+          .equ PUD        = 7
+          .equ SM1        = 6
+          .equ SE         = 5
+          .equ SM0        = 4
+          .equ ISC11      = 3
+          .equ ISC10      = 2
+          .equ ISC01      = 1
+          .equ ISC00      = 0
+          .equ SM         = 4     ; for compatibility purpose
+         
+         ;***** MCUSR ******
+          .equ WDRF       = 3
+          .equ BORF       = 2
+          .equ EXTRF      = 1
+          .equ PORF       = 0
+         
+         ;***** TCCR0B *****
+          .equ FOC0A      = 7
+          .equ FOC0B      = 6
+          .equ WGM02      = 3
+          .equ CS02       = 2
+          .equ CS01       = 1
+          .equ CS00       = 0
+         
+         ;***** OSCCAL *****
+          .equ CAL6       = 6
+          .equ CAL5       = 5
+          .equ CAL4       = 4
+          .equ CAL3       = 3
+          .equ CAL2       = 2
+          .equ CAL1       = 1
+          .equ CAL0       = 0
+         
+         ;***** TCCR0A *****
+          .equ COM0A1     = 7
+          .equ COM0A0     = 6
+          .equ COM0B1     = 5
+          .equ COM0B0     = 4
+          .equ WGM01      = 1
+          .equ WGM00      = 0
+         
+         ;***** TCCR1A *****
+          .equ COM1A1     = 7
+          .equ COM1A0     = 6
+          .equ COM1B1     = 5
+          .equ COM1B0     = 4
+          .equ WGM11      = 1
+          .equ WGM10      = 0
+          .equ PWM11      = 1     ; for compatibility purpose
+          .equ PWM10      = 0     ; for compatibility purpose
+         
+         ;***** TCCR1B *****
+          .equ ICNC1      = 7
+          .equ ICES1      = 6
+          .equ WGM13      = 4
+          .equ WGM12      = 3
+          .equ CS12       = 2
+          .equ CS11       = 1
+          .equ CS10       = 0
+          .equ CTC1       = 3     ; for compatibility purpose
+         
+         ;***** CLKPR ******
+          .equ CLKPCE     = 7 
+          .equ CLKPS3     = 3
+          .equ CLKPS2     = 2
+          .equ CLKPS1     = 1
+          .equ CLKPS0     = 0
+         
+         ;***** SFIOR ******
+          .equ PSR10      = 0 
+         
+         ;***** TCCR1C *****
+          .equ FOC1A      = 7
+          .equ FOC1B      = 6
+         
+         ;***** WDTCSR *****
+          .equ WDIF       = 7
+          .equ WDIE       = 6
+          .equ WDP3       = 5
+          .equ WDCE       = 4
+          .equ WDE        = 3
+          .equ WDP2       = 2
+          .equ WDP1       = 1
+          .equ WDP0       = 0
+          .equ WDTOE      = 4     
+         
+         ;***** PCMSK ******
+          .equ PCINT7     = 7
+          .equ PCINT6     = 6
+          .equ PCINT5     = 5  
+          .equ PCINT4     = 4
+          .equ PCINT3     = 3
+          .equ PCINT2     = 2
+          .equ PCINT1     = 1
+          .equ PCINT0     = 0
+         
+         ;***** EECR *******
+          .equ EEPM1      = 5
+          .equ EEPM0      = 4
+          .equ EERIE      = 3
+          .equ EEMPE      = 2
+          .equ EEPE       = 1
+          .equ EERE       = 0
+         ; Kept for backward compatibility
+          .equ EEMWE      = 2
+          .equ EEWE       = 1
+         
+         
+         ;***** PORTA ******
+          .equ PORTA2     = 2
+          .equ PORTA1     = 1
+          .equ PORTA0     = 0
+         
+         ;***** DDRA *******
+          .equ DDA2       = 2
+          .equ DDA1       = 1
+          .equ DDA0       = 0
+             
+         ;***** PINA *******
+          .equ PINA2      = 2
+          .equ PINA1      = 1
+          .equ PINA0      = 0
+             
+         ;***** PORTB ******
+          .equ PORTB7     = 7
+          .equ PORTB6     = 6
+          .equ PORTB5     = 5
+          .equ PORTB4     = 4
+          .equ PORTB3     = 3
+          .equ PORTB2     = 2
+          .equ PORTB1     = 1
+          .equ PORTB0     = 0
+         
+         ;***** DDRB *******
+          .equ DDB7       = 7
+          .equ DDB6       = 6
+          .equ DDB5       = 5 
+          .equ DDB4       = 4
+          .equ DDB3       = 3
+          .equ DDB2       = 2
+          .equ DDB1       = 1
+          .equ DDB0       = 0
+             
+         ;***** PINB *******
+          .equ PINB7      = 7
+          .equ PINB6      = 6
+          .equ PINB5      = 5 
+          .equ PINB4      = 4
+          .equ PINB3      = 3
+          .equ PINB2      = 2
+          .equ PINB1      = 1
+          .equ PINB0      = 0
+         
+         ;***** PORTD ******
+          .equ PORTD6     = 6
+          .equ PORTD5     = 5
+          .equ PORTD4     = 4
+          .equ PORTD3     = 3
+          .equ PORTD2     = 2
+          .equ PORTD1     = 1
+          .equ PORTD0     = 0
+         
+         ;***** DDRD *******
+          .equ DDD6       = 6
+          .equ DDD5       = 5 
+          .equ DDD4       = 4
+          .equ DDD3       = 3
+          .equ DDD2       = 2
+          .equ DDD1       = 1
+          .equ DDD0       = 0
+         
+         ;***** PIND *******
+          .equ PIND6      = 6
+          .equ PIND5      = 5 
+          .equ PIND4      = 4
+          .equ PIND3      = 3
+          .equ PIND2      = 2
+          .equ PIND1      = 1
+          .equ PIND0      = 0 
+         
+         ;***** USISR ******
+          .equ USISIF     = 7
+          .equ USIOIF     = 6
+          .equ USIPF      = 5
+          .equ USIDC      = 4
+          .equ USICNT3    = 3
+          .equ USICNT2    = 2
+          .equ USICNT1    = 1
+          .equ USICNT0    = 0
+         
+         ;***** USICR ******
+          .equ USISIE     = 7
+          .equ USIOIE     = 6
+          .equ USIWM1     = 5
+          .equ USIWM0     = 4
+          .equ USICS1     = 3
+          .equ USICS0     = 2
+          .equ USICLK     = 1
+          .equ USITC      = 0
+         
+         ;***** UCSRA ******
+          .equ RXC        = 7
+          .equ TXC        = 6
+          .equ UDRE       = 5
+          .equ FE         = 4
+          .equ DOR        = 3
+          .equ UPE	= 2
+          .equ PE         = 2	; for compatibility purpose
+          .equ U2X        = 1
+          .equ MPCM       = 0
+          .equ OR         = 3     ; for compatibility purpose
+         
+         ;***** UCSRB ******
+          .equ RXCIE      = 7 
+          .equ TXCIE      = 6
+          .equ UDRIE      = 5
+          .equ RXEN       = 4
+          .equ TXEN       = 3
+          .equ UCSZ2      = 2
+          .equ RXB8       = 1
+          .equ TXB8       = 0
+          .equ CHR9       = 2     ; for compatibility purpose
+             
+         ;***** ACSR *******
+          .equ ACD        = 7  
+          .equ ACBG       = 6
+          .equ ACO        = 5
+          .equ ACI        = 4
+          .equ ACIE       = 3
+          .equ ACIC       = 2
+          .equ ACIS1      = 1
+          .equ ACIS0      = 0
+         
+         ;***** UCSRC ******
+          .equ UMSEL      = 6 
+          .equ UPM1       = 5
+          .equ UPM0       = 4
+          .equ USBS       = 3
+          .equ UCSZ1      = 2
+          .equ UCSZ0      = 1
+          .equ UCPOL      = 0
+         
+         ;***** DIDR ******
+          .equ AIN1D      = 1
+          .equ AIN0D      = 0
+         
+         ;*****************************************************************************
+         ; CPU Register Declarations
+         ;*****************************************************************************
+         
+          .def    XL      = r26       ; X pointer low
+          .def    XH      = r27       ; X pointer high
+          .def    YL      = r28       ; Y pointer low
+          .def    YH      = r29       ; Y pointer high
+          .def    ZL      = r30       ; Z pointer low
+          .def    ZH      = r31       ; Z pointer high
+         
+         
+         ;*****************************************************************************
+         ; Data Memory Declarations
+         ;*****************************************************************************
+         
+          .equ    RAMEND      = 0xDF  ; Highest internal data memory (SRAM) address.
+                                     ;(128 Bytes RAM + IO + REG)
+          .equ    EEPROMEND   = 0x7F  ; Highest EEPROM address.
+                                     ;(128 Bytes)
+          .equ    EEADRBITS   =   7   ; no. of bits in EEPROM address register
+         
+          .equ    RAM_SIZE    = 128
+         
+         
+         ;*****************************************************************************
+         ; Program Memory Declarations
+         ;*****************************************************************************
+         
+          .equ    FLASHEND    = 0x3FF ;  Highest program memory (flash) address
+                                     ; (When addressed as 16 bit words)
+                                     ; ( 1024 words , 2K byte ) 
+         
+         ;**** Page Size ****
+          .equ    PAGESIZE    = 16    ;number of WORDS in a Flash page
+          .equ    EEPAGESIZE  =  2    ;number of WORDS in an EEPROM page
+         
+         ;*****************************************************************************
+         ;**** Interrupt Vectors ****        
+         ;*****************************************************************************
+         
+          .equ    INT0addr        = 0x001     ;External Interrupt0
+          .equ    INT1addr        = 0x002     ;External Interrupt1
+          .equ    ICP1addr        = 0x003     ;Input capture interrupt 1
+          .equ    OC1Aaddr        = 0x004     ;Timer/Counter1 Compare Match A     
+          .equ    OVF1addr        = 0x005     ;Overflow1 Interrupt 
+          .equ    OVF0addr        = 0x006     ;Overflow0 Interrupt
+          .equ    URXC0addr       = 0x007     ;USART0 RX Complete Interrupt
+          .equ    UDRE0addr       = 0x008     ;USART0 Data Register Empty Interrupt
+          .equ    UTXC0addr       = 0x009     ;USART0 TX Complete Interrupt 
+          .equ    ACIaddr         = 0x00A     ;Analog Comparator Interrupt 
+          .equ    PCINTaddr       = 0x00B     ;Pin Change Interrupt
+          .equ    OC1Baddr        = 0x00C     ;Timer/Counter1 Compare Match B
+          .equ    OC0Aaddr        = 0x00D     ;Timer/Counter0 Compare Match A     
+          .equ    OC0Baddr        = 0x00E     ;Timer/Counter0 Compare Match B     
+          .equ    USI_STARTaddr   = 0x00F     ;USI start interrupt
+          .equ    USI_OVFaddr     = 0x010     ;USI overflow interrupt
+          .equ    ERDYaddr        = 0x011     ;EEPROM write complete
+          .equ    WDTaddr         = 0x012     ;Watchdog Timer Interrupt
+         		; for compatibility purpose
+          .equ	URXCaddr		= 0x007		
+          .equ	UDREaddr		= 0x008		
+          .equ	UTXCaddr		= 0x009		
+         
+         ;*****************************************************************************
+         ;*****************************************************************************
+         
+          .equ scroll_speed = 10					; higher value => lower speed
+         
+         ; variables -----------------------------------------------------------------------------------------------------------------------
+         
+          .def row8 = r8							; topmost line of frame buffer
+          .def row7 = r7							;
+          .def row6 = r6							;
+          .def row5 = r5							;
+          .def row4 = r4							;
+          .def row3 = r3							;
+          .def row2 = r2							;
+          .def row1 = r1							; lowermost line of frame buffer
+         
+          .def alt_row8 = r16						; topmost line of alternate frame buffer
+          .def alt_row7 = r15						;
+          .def alt_row6 = r14						;
+          .def alt_row5 = r13						;
+          .def alt_row4 = r12						;
+          .def alt_row3 = r11						;
+          .def alt_row2 = r10						;
+          .def alt_row1 = r9						; lowermost line of alternate frame buffer
+         
+          .def pa_data = r17						; data to be output on porta
+          .def pb_data = r18						; data to be output on portb
+          .def pd_data = r19						; data to be output on portd
+         
+          .def tmp1 = r20
+          .def tmp2 = r21
+          .def tmp3 = r22
+         
+         ; **************************************************
+         ; * code segment initialization
+         ; **************************************************
+         
+          .cseg
+          .org 0x0000
+000000 c0b0      	rjmp mcu_init						; Reset interrupt
+         
+         ; **************************************************
+         ; * flash data table
+         ; **************************************************
+         
+          data_table:
+         ;	 data for each line of led matrix					 char			address offset (tmp2:tmp1)
+          	.db	0xFF, 0xC3, 0x99, 0x81, 0x99, 0x99, 0x99, 0xFF	; A 			[0][0]
+000001 c3ff
+000002 8199
+000003 9999
+000004 ff99
+          	.db	0xFF, 0x83, 0x99, 0x83, 0x99, 0x99, 0x83, 0xFF	; B 			[0][8]
+000005 83ff
+000006 8399
+000007 9999
+000008 ff83
+          	.db	0xFF, 0xC3, 0x9F, 0x9F, 0x9F, 0x9F, 0xC3, 0xFF	; C 			[0][16]
+000009 c3ff
+00000a 9f9f
+00000b 9f9f
+00000c ffc3
+          	.db	0xFF, 0x83, 0x99, 0x99, 0x99, 0x99, 0x83, 0xFF	; D 			[0][24]
+00000d 83ff
+00000e 9999
+00000f 9999
+000010 ff83
+          	.db	0xFF, 0x83, 0x9F, 0x87, 0x9F, 0x9F, 0x83, 0xFF	; E 			[0][32]
+000011 83ff
+000012 879f
+000013 9f9f
+000014 ff83
+          	.db	0xFF, 0x81, 0x9F, 0x9F, 0x87, 0x9F, 0x9F, 0xFF	; F 			[0][40]
+000015 81ff
+000016 9f9f
+000017 9f87
+000018 ff9f
+          	.db	0xFF, 0xC1, 0x9F, 0x9F, 0x91, 0x99, 0xC1, 0xFF	; G 			[0][48]
+000019 c1ff
+00001a 9f9f
+00001b 9991
+00001c ffc1
+          	.db	0xFF, 0x99, 0x99, 0x81, 0x99, 0x99, 0x99, 0xFF	; H 			[0][56]
+00001d 99ff
+00001e 8199
+00001f 9999
+000020 ff99
+          	.db	0xFF, 0xC3, 0xE7, 0xE7, 0xE7, 0xE7, 0xC3, 0xFF	; I 			[0][64]
+000021 c3ff
+000022 e7e7
+000023 e7e7
+000024 ffc3
+          	.db	0xFF, 0x83, 0xE7, 0xE7, 0xE7, 0xE7, 0x8F, 0xFF	; J 			[0][72]
+000025 83ff
+000026 e7e7
+000027 e7e7
+000028 ff8f
+          	.db	0xFF, 0x99, 0x93, 0x87, 0x87, 0x93, 0x99, 0xFF	; K 			[0][80]
+000029 99ff
+00002a 8793
+00002b 9387
+00002c ff99
+          	.db	0xFF, 0x9F, 0x9F, 0x9F, 0x9F, 0x9F, 0x83, 0xFF	; L 			[0][88]
+00002d 9fff
+00002e 9f9f
+00002f 9f9f
+000030 ff83
+          	.db	0xFF, 0xBD, 0x99, 0x81, 0x99, 0x99, 0x99, 0xFF	; M 			[0][96]
+000031 bdff
+000032 8199
+000033 9999
+000034 ff99
+          	.db	0xFF, 0xB9, 0x99, 0x89, 0x91, 0x99, 0x9D, 0xFF	; N 			[0][104]
+000035 b9ff
+000036 8999
+000037 9991
+000038 ff9d
+          	.db	0xFF, 0xC3, 0x99, 0x99, 0x99, 0x99, 0xC3, 0xFF	; O 			[0][112]
+000039 c3ff
+00003a 9999
+00003b 9999
+00003c ffc3
+          	.db	0xFF, 0x83, 0x99, 0x99, 0x83, 0x9F, 0x9F, 0xFF	; P 			[0][120]
+00003d 83ff
+00003e 9999
+00003f 9f83
+000040 ff9f
+          	.db	0xFF, 0xC3, 0x9D, 0x9D, 0x99, 0x93, 0xC5, 0xFF	; Q 			[0][128]
+000041 c3ff
+000042 9d9d
+000043 9399
+000044 ffc5
+          	.db	0xFF, 0x83, 0x99, 0x99, 0x83, 0x97, 0x99, 0xFF	; R 			[0][136]
+000045 83ff
+000046 9999
+000047 9783
+000048 ff99
+          	.db	0xFF, 0xC3, 0x9F, 0xC3, 0xF9, 0xF9, 0xC3, 0xFF	; S 			[0][144]
+000049 c3ff
+00004a c39f
+00004b f9f9
+00004c ffc3
+          	.db	0xFF, 0x81, 0xE7, 0xE7, 0xE7, 0xE7, 0xE7, 0xFF	; T 			[0][152]
+00004d 81ff
+00004e e7e7
+00004f e7e7
+000050 ffe7
+          	.db	0xFF, 0x99, 0x99, 0x99, 0x99, 0x99, 0xC3, 0xFF	; U 			[0][160]
+000051 99ff
+000052 9999
+000053 9999
+000054 ffc3
+          	.db	0xFF, 0x99, 0x99, 0x99, 0xDB, 0xC3, 0xE7, 0xFF	; V 			[0][168]
+000055 99ff
+000056 9999
+000057 c3db
+000058 ffe7
+          	.db	0xFF, 0x99, 0x99, 0x99, 0x81, 0x99, 0xBD, 0xFF	; W 			[0][176]
+000059 99ff
+00005a 9999
+00005b 9981
+00005c ffbd
+          	.db	0xFF, 0x99, 0xC3, 0xE7, 0xE7, 0xC3, 0x99, 0xFF	; X 			[0][184]
+00005d 99ff
+00005e e7c3
+00005f c3e7
+000060 ff99
+          	.db	0xFF, 0x99, 0x99, 0xC3, 0xE7, 0xE7, 0xE7, 0xFF	; Y 			[0][192]
+000061 99ff
+000062 c399
+000063 e7e7
+000064 ffe7
+          	.db	0xFF, 0x81, 0xF9, 0xF3, 0xE7, 0xCF, 0x81, 0xFF	; Z 			[0][200]
+000065 81ff
+000066 f3f9
+000067 cfe7
+000068 ff81
+          	.db	0xFF, 0xCF, 0xCF, 0xCF, 0xEF, 0xFF, 0xEF, 0xFF	; ! 			[0][208]
+000069 cfff
+00006a cfcf
+00006b ffef
+00006c ffef
+          	.db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xCF, 0xCF, 0xFF	; .				[0][216]
+00006d ffff
+00006e ffff
+00006f cfff
+000070 ffcf
+          	.db 0xFF, 0xFF, 0xFF, 0xC3, 0xC3, 0xFF, 0xFF, 0xFF	; - 			[0][224]
+000071 ffff
+000072 c3ff
+000073 ffc3
+000074 ffff
+          	.db 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; SPACE			[0][232]
+000075 ffff
+000076 ffff
+000077 ffff
+000078 ffff
+          	.db 0xFF, 0xE7, 0xCF, 0xCF, 0xCF, 0xCF, 0xE7, 0xFF ; (				[0][240]
+000079 e7ff
+00007a cfcf
+00007b cfcf
+00007c ffe7
+          	.db 0xFF, 0xE7, 0xF3, 0xF3, 0xF3, 0xF3, 0xE7, 0xFF ; )				[0][248]
+00007d e7ff
+00007e f3f3
+00007f f3f3
+000080 ffe7
+         
+          	.db 0xDB, 0xE7, 0x81, 0x24, 0x00, 0xDB, 0xA5, 0x7E	; alien1		[1][0]
+000081 e7db
+000082 2481
+000083 db00
+000084 7ea5
+          	.db 0xE7, 0xC3, 0x81, 0x24, 0x00, 0xDB, 0xA5, 0x5A	; alien2		[1][8]
+000085 c3e7
+000086 2481
+000087 db00
+000088 5aa5
+         
+          	.db 0xFF, 0xFF, 0xDB, 0xE7, 0xE7, 0xDB, 0xFF, 0xFF ; bang1			[1][16]
+000089 ffff
+00008a e7db
+00008b dbe7
+00008c ffff
+          	.db 0x7E, 0xA5, 0xC3, 0x81, 0x81, 0xC3, 0xA5, 0x7E ; bang2			[1][24]
+00008d a57e
+00008e 81c3
+00008f c381
+000090 7ea5
+          	.db 0x24, 0x00, 0x81, 0x00, 0x00, 0x81, 0x00, 0x24 ; bang3			[1][32]
+000091 0024
+000092 0081
+000093 8100
+000094 2400
+         
+          nickname:	; string length = 6
+          	.db 0, 152, 0, 88, 224, 184
+000095 9800
+000096 5800
+000097 b8e0
+         
+          message:	; string length = 50
+          	.db 48, 136, 32, 32, 152, 64, 104, 48, 144, 232, 152, 112, 232, 120, 136, 0, 32, 152, 112, 232, 240, 96, 112, 160
+000098 8830
+000099 2020
+00009a 4098
+00009b 3068
+00009c e890
+00009d 7098
+00009e 78e8
+00009f 0088
+0000a0 9820
+0000a1 e870
+0000a2 60f0
+0000a3 a070
+          	.db 136, 64, 24, 64, 144, 248, 232, 0, 104, 24, 232, 144, 160, 8, 200, 32, 136, 112, 232, 240, 16, 168, 0, 136, 248, 208
+0000a4 4088
+0000a5 4018
+0000a6 f890
+0000a7 00e8
+0000a8 1868
+0000a9 90e8
+0000aa 08a0
+0000ab 20c8
+0000ac 7088
+0000ad f0e8
+0000ae a810
+0000af 8800
+0000b0 d0f8
+         
+         ; **************************************************
+         ; * microcontroller initialization
+         ; **************************************************
+         
+          mcu_init:
+0000b1 ed4f      	ldi tmp1, $df					; Stack Pointer setup 
+0000b2 bf4d      	out SPL, tmp1
+         
+0000b3 ef4f      	ser tmp1
+0000b4 bb4a      	out DDRA, tmp1					; all porta pins as outputs
+0000b5 bb47      	out DDRB, tmp1					; all portb pins as outputs
+0000b6 bb41      	out DDRD, tmp1					; all portd pins as outputs
+         
+0000b7 9a47      	sbi ACSR, ACD					; turn off analog comparator
+0000b8 9846      	cbi	ACSR, ACBG					; disconnect analog comparator from internal voltage reference
+         
+0000b9 b744      	in tmp1, MCUSR					;
+0000ba 7f47      	andi tmp1, 0b11110111			; clear WDRF in MCUSR
+0000bb bf44      	out MCUSR, tmp1					;
+         
+0000bc b541      	in tmp1, WDTCR					; write logical one to WDCE and WDE
+0000bd 6148      	ori tmp1, 0b00011000			; keep old prescaler setting to prevent unintentional time-out
+0000be bd41      	out WDTCR, tmp1					;
+0000bf 2744      	clr	tmp1						;
+0000c0 bd41      	out WDTCR, tmp1					; turn off watchdog timer
+         
+         ; **************************************************
+         ; * print loop for all messages
+         ; **************************************************
+         
+         ; AVAILABLE METHODS:___________________________________________________________________________________________________________
+         ;	ldi tmp1, m					; reading address offset (low byte)
+         ;	ldi tmp2, n					; reading address offset (high byte)
+         ;	rcall flash2regfile			; copy from flash to register file
+         ;								;
+         ;	rcall copy_from_sec			; copy data from secondary buffer to primary
+         ;	rcall clear_sec				; clear secondary buffer
+         ;								;
+         ;	rcall left_loop				; shift secondary buffer into primary (from right to left) and the primary accordingly
+         ;	rcall right_loop			; shift secondary buffer into primary (from left to right) and the primary accordingly
+         ;	rcall down_loop				; shift secondary buffer into primary (from up to down) and the primary accordingly
+         ;	rcall up_loop				; shift secondary buffer into primary (from down to up) and the primary accordingly
+         ;								;
+         ;	ldi tmp1, k					;
+         ;	rcall scan_loop				; scan primary buffer k times
+         
+         
+          main_loop:
+         
+         ; ------------------------------ my nickname as described in "nickname" table
+0000c1 d093      	rcall clear_sec
+0000c2 d089      	rcall copy_from_sec
+0000c3 e240      	ldi tmp1, 32
+0000c4 d043      	rcall scan_loop
+         
+0000c5 e248      	ldi tmp1, 40
+0000c6 2755      	clr tmp2
+0000c7 d077      	rcall flash2regfile
+0000c8 d0e9      	rcall right_loop
+0000c9 e240      	ldi tmp1, 32
+0000ca d03d      	rcall scan_loop
+         
+0000cb 2766      	clr tmp3
+          type_nickname:
+0000cc e0f1      	ldi ZH, high (nickname * 2)		; starting address of table with nickname letters
+0000cd e2ea      	ldi ZL, low (nickname * 2)		; starting address of table with nickname letters
+         
+0000ce 2755      	clr tmp2						; prepare offset for character table reading
+0000cf 0fe6      	add ZL, tmp3
+0000d0 1ff5      	adc ZH, tmp2
+         
+0000d1 9144      	lpm	tmp1, Z						; load letter address
+0000d2 d06c      	rcall flash2regfile				;
+0000d3 d0d9      	rcall left_loop					; shift buffer with loaded letter
+         
+0000d4 9563      	inc tmp3
+0000d5 3066      	cpi tmp3, 6						; check if reached string length
+0000d6 f7a9      	brne type_nickname
+         
+0000d7 eb44      	ldi tmp1,180
+0000d8 d02f      	rcall scan_loop
+0000d9 eb44      	ldi tmp1,180
+0000da d02d      	rcall scan_loop
+         ; ------------------------------ alien 1
+0000db d079      	rcall clear_sec
+0000dc d06f      	rcall copy_from_sec
+0000dd e340      	ldi tmp1, 48
+0000de d029      	rcall scan_loop
+         
+0000df e040      	ldi tmp1, 0
+0000e0 e051      	ldi tmp2, 1
+0000e1 d05d      	rcall flash2regfile
+0000e2 d0d4      	rcall up_loop
+         
+0000e3 ec48      	ldi tmp1,200
+0000e4 d023      	rcall scan_loop
+0000e5 ec48      	ldi tmp1,200
+0000e6 d021      	rcall scan_loop
+         ; ------------------------------ alien 2
+0000e7 d06d      	rcall clear_sec
+0000e8 d063      	rcall copy_from_sec
+0000e9 e340      	ldi tmp1, 48
+0000ea d01d      	rcall scan_loop
+         
+0000eb e048      	ldi tmp1,8
+0000ec e051      	ldi tmp2,1
+0000ed d051      	rcall flash2regfile
+0000ee d0cd      	rcall down_loop
+         
+0000ef ec48      	ldi tmp1,200
+0000f0 d017      	rcall scan_loop
+0000f1 ec48      	ldi tmp1,200
+0000f2 d015      	rcall scan_loop
+         ; ------------------------------ a message as described in "message" table
+0000f3 d061      	rcall clear_sec
+0000f4 d057      	rcall copy_from_sec
+0000f5 e240      	ldi tmp1, 32
+0000f6 d011      	rcall scan_loop
+         
+0000f7 2766      	clr tmp3
+          type_message:
+0000f8 e0f1      	ldi ZH, high (message * 2)		; starting address of table with message letters
+0000f9 e3e0      	ldi ZL, low (message * 2)		; starting address of table with message letters
+         
+0000fa 2755      	clr tmp2						; prepare offset for character table reading
+0000fb 0fe6      	add ZL, tmp3
+0000fc 1ff5      	adc ZH, tmp2
+         
+0000fd 9144      	lpm	tmp1, Z						; load letter address
+0000fe d040      	rcall flash2regfile				;
+0000ff d0ad      	rcall left_loop					; shift buffer with loaded letter
+         
+000100 9563      	inc tmp3
+000101 3362      	cpi tmp3, 50					; check if reached string length
+000102 f7a9      	brne type_message
+         
+000103 e946      	ldi tmp1,150
+000104 d003      	rcall scan_loop
+000105 e946      	ldi tmp1,150
+000106 d001      	rcall scan_loop
+         
+000107 cfb9      rjmp main_loop
+         
+         
+         
+         ; **************************************************
+         ; * scan matrix line by line
+         ; * repeat tmp1 times
+         ; **************************************************
+         
+          scan_loop:
+000108 935f      	push tmp2
+         
+          repeat_scan:
+000109 6011      	sbr pa_data,0b00000001				; enable row 08 (topmost)
+00010a 2d58      		mov tmp2,row8					; load row data from buffer
+00010b d019      		rcall data_output
+00010c 6130      	sbr pd_data,0b00010000
+00010d 2d57      		mov tmp2,row7
+00010e d016      		rcall data_output
+00010f 6032      	sbr pd_data,0b00000010
+000110 2d56      		mov tmp2,row6
+000111 d013      		rcall data_output
+000112 6230      	sbr pd_data,0b00100000
+000113 2d55      		mov tmp2,row5
+000114 d010      		rcall data_output
+000115 6120      	sbr pb_data,0b00010000
+000116 2d54      		mov tmp2,row4
+000117 d00d      		rcall data_output
+000118 6031      	sbr pd_data,0b00000001
+000119 2d53      		mov tmp2,row3
+00011a d00a      		rcall data_output
+00011b 6024      	sbr pb_data,0b00000100
+00011c 2d52      		mov tmp2,row2
+00011d d007      		rcall data_output
+00011e 6820      	sbr pb_data,0b10000000
+00011f 2d51      		mov tmp2,row1
+000120 d004      		rcall data_output
+         
+000121 954a      	dec tmp1							; decrease tmp1 (frame_cnt)
+000122 f731      	brne repeat_scan					; if not zero, keep scanning
+         
+000123 915f      	pop tmp2
+000124 9508      	ret
+         
+         ; **************************************************
+         ; * turn appropriate columns on
+         ; * output all data to ports
+         ; * let row shine for a while
+         ; **************************************************
+         
+          data_output:
+000125 fd57      	sbrc tmp2,7							; LED is on if corresponding data bit is clear
+000126 6021      	sbr pb_data,0b00000001				; if not, LED is switched off (inverse logic)
+000127 fd56      	sbrc tmp2,6
+000128 6022      	sbr pb_data,0b00000010
+000129 fd55      	sbrc tmp2,5
+00012a 6220      	sbr pb_data,0b00100000
+00012b fd54      	sbrc tmp2,4
+00012c 6012      	sbr pa_data,0b00000010
+00012d fd53      	sbrc tmp2,3
+00012e 6420      	sbr pb_data,0b01000000
+00012f fd52      	sbrc tmp2,2
+000130 6034      	sbr pd_data,0b00000100
+000131 fd51      	sbrc tmp2,1
+000132 6038      	sbr pd_data,0b00001000
+000133 fd50      	sbrc tmp2,0
+000134 6028      	sbr pb_data,0b00001000
+         
+000135 bb1b      	out PORTA,pa_data					; output all data
+000136 bb28      	out PORTB,pb_data					;
+000137 bb32      	out PORTD,pd_data					;
+         
+000138 2711      	clr pa_data							; "prepare" port data registers for next row
+000139 2722      	clr pb_data							;
+00013a 2733      	clr pd_data							;
+         
+00013b 2755      	clr tmp2							;
+          wait:									; small delay for leds to shine...
+00013c 955a      	dec tmp2							;
+00013d f7f1      	brne wait							;
+         
+00013e 9508      	ret
+         
+         ; **************************************************
+         ; * copy parts of flash table to secondary buffer
+         ; * tmp2:tmp1 represents the address offset
+         ; **************************************************
+         
+          flash2regfile:
+00013f 27dd      	clr YH								;
+000140 e1c1      	ldi YL,0x11							; register file pointer => start of secondary buffer
+         
+000141 e0f0      	ldi ZH,high (data_table * 2)		; starting address of flash table
+000142 e0e2      	ldi ZL,low (data_table * 2)			; starting address of flash table
+000143 0fe4      	add ZL,tmp1							; add address offset
+000144 1ff5      	adc ZH,tmp2							; add address offset
+         
+          init_load:
+000145 e048      	ldi tmp1,8							; counter for bytes to be transfered
+          load_loop:
+000146 95c8      	lpm									; load from flash memory
+000147 9631      	adiw ZL,1							;
+000148 920a      	st -Y,r0							; store in register file
+000149 954a      	dec tmp1							; decrease byte counter
+00014a f7d9      	brne load_loop						; repeat until counter=0
+00014b 9508      ret
+         
+         ; **************************************************
+         ; * scroll old frame out - new frame in (left)
+         ; * scroll old frame out - new frame in (right)
+         ; * scroll old frame out - new frame in (up)
+         ; * scroll old frame out - new frame in (down)
+         ; **************************************************
+         
+          copy_from_sec:
+00014c 2e80      	mov row8,alt_row8
+00014d 2c7f      	mov row7,alt_row7
+00014e 2c6e      	mov row6,alt_row6
+00014f 2c5d      	mov row5,alt_row5
+000150 2c4c      	mov row4,alt_row4
+000151 2c3b      	mov row3,alt_row3
+000152 2c2a      	mov row2,alt_row2
+000153 2c19      	mov row1,alt_row1
+000154 9508      ret
+         ; ***************
+          clear_sec:
+000155 ef4f      	ser tmp1
+000156 2f04      	mov alt_row8,tmp1
+000157 2ef4      	mov alt_row7,tmp1
+000158 2ee4      	mov alt_row6,tmp1
+000159 2ed4      	mov alt_row5,tmp1
+00015a 2ec4      	mov alt_row4,tmp1
+00015b 2eb4      	mov alt_row3,tmp1
+00015c 2ea4      	mov alt_row2,tmp1
+00015d 2e94      	mov alt_row1,tmp1
+00015e 9508      ret
+         ; ***************
+          left:
+00015f 1f00      	rol alt_row8
+000160 1c88      	rol row8
+000161 1cff      	rol alt_row7
+000162 1c77      	rol row7
+000163 1cee      	rol alt_row6
+000164 1c66      	rol row6
+000165 1cdd      	rol alt_row5
+000166 1c55      	rol row5
+000167 1ccc      	rol alt_row4
+000168 1c44      	rol row4
+000169 1cbb      	rol alt_row3
+00016a 1c33      	rol row3
+00016b 1caa      	rol alt_row2
+00016c 1c22      	rol row2
+00016d 1c99      	rol alt_row1
+00016e 1c11      	rol row1
+         
+00016f e04a      	ldi tmp1,scroll_speed
+000170 df97      	rcall scan_loop
+000171 9508      ret
+         ; ***************
+          right:
+000172 9507      	ror alt_row8
+000173 9487      	ror row8
+000174 94f7      	ror alt_row7
+000175 9477      	ror row7
+000176 94e7      	ror alt_row6
+000177 9467      	ror row6
+000178 94d7      	ror alt_row5
+000179 9457      	ror row5
+00017a 94c7      	ror alt_row4
+00017b 9447      	ror row4
+00017c 94b7      	ror alt_row3
+00017d 9437      	ror row3
+00017e 94a7      	ror alt_row2
+00017f 9427      	ror row2
+000180 9497      	ror alt_row1
+000181 9417      	ror row1
+         
+000182 e04a      	ldi tmp1,scroll_speed
+000183 df84      	rcall scan_loop
+000184 9508      ret
+         ; ***************
+          up:
+000185 2c87      	mov row8,row7
+000186 2c76      	mov row7,row6
+000187 2c65      	mov row6,row5
+000188 2c54      	mov row5,row4
+000189 2c43      	mov row4,row3
+00018a 2c32      	mov row3,row2
+00018b 2c21      	mov row2,row1
+00018c 2e10      	mov row1,alt_row8
+00018d 2d0f      	mov alt_row8,alt_row7
+00018e 2cfe      	mov alt_row7,alt_row6
+00018f 2ced      	mov alt_row6,alt_row5
+000190 2cdc      	mov alt_row5,alt_row4
+000191 2ccb      	mov alt_row4,alt_row3
+000192 2cba      	mov alt_row3,alt_row2
+000193 2ca9      	mov alt_row2,alt_row1
+000194 ef4f      	ser tmp1
+000195 2e94      	mov alt_row1,tmp1
+         
+000196 e04a      	ldi tmp1,scroll_speed
+000197 df70      	rcall scan_loop
+000198 9508      ret
+         ; ***************
+          down:
+000199 2c12      	mov row1,row2
+00019a 2c23      	mov row2,row3
+00019b 2c34      	mov row3,row4
+00019c 2c45      	mov row4,row5
+00019d 2c56      	mov row5,row6
+00019e 2c67      	mov row6,row7
+00019f 2c78      	mov row7,row8
+0001a0 2c89      	mov row8,alt_row1
+0001a1 2c9a      	mov alt_row1,alt_row2
+0001a2 2cab      	mov alt_row2,alt_row3
+0001a3 2cbc      	mov alt_row3,alt_row4
+0001a4 2ccd      	mov alt_row4,alt_row5
+0001a5 2cde      	mov alt_row5,alt_row6
+0001a6 2cef      	mov alt_row6,alt_row7
+0001a7 2ef0      	mov alt_row7,alt_row8
+0001a8 ef4f      	ser tmp1
+0001a9 2f04      	mov alt_row8,tmp1
+         
+0001aa e04a      	ldi tmp1,scroll_speed
+0001ab df5c      	rcall scan_loop
+0001ac 9508      ret
+         ; ***************
+          left_loop:
+0001ad e058      	ldi tmp2,8
+          left_loop1:
+0001ae dfb0      	rcall left
+0001af 955a      	dec tmp2
+0001b0 f7e9      	brne left_loop1
+0001b1 9508      ret
+         ; ***************
+          right_loop:
+0001b2 e058      	ldi tmp2,8
+          right_loop1:
+0001b3 dfbe      	rcall right
+0001b4 955a      	dec tmp2
+0001b5 f7e9      	brne right_loop1
+0001b6 9508      ret
+         ; ***************
+          up_loop:
+0001b7 e058      	ldi tmp2,8
+          up_loop1:
+0001b8 dfcc      	rcall up
+0001b9 955a      	dec tmp2
+0001ba f7e9      	brne up_loop1
+0001bb 9508      ret
+         ; ***************
+          down_loop:
+0001bc e058      	ldi tmp2,8
+          down_loop1:
+0001bd dfdb      	rcall down
+0001be 955a      	dec tmp2
+0001bf f7e9      	brne down_loop1
+0001c0 9508      ret
+
+Assembly complete with no errors.
